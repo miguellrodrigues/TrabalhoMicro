@@ -12,6 +12,6 @@ void lcd_put_cur(int row, int col);  // put cursor at the entered position row (
 
 void lcd_clear (void);
 
-void lcd_send_custom (const char* str, uint8_t pos_x, uint8_t pos_y);
+void lcd_send_custom (char* str, uint8_t pos_x, uint8_t pos_y);
 
-void update_value(char* string, volatile float valor, uint8_t pos_x, uint8_t pos_y);
+void update_value(char* string, float valor, uint8_t pos_x, uint8_t pos_y);

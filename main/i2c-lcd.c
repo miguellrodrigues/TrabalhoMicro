@@ -9,7 +9,7 @@
 
 static const char *TAG = "LCD";
 
-esp_err_t err;
+esp_err_t err_lcd;
 
 void lcd_send_cmd(uint8_t cmd) {
     uint8_t data_t[4];
@@ -17,8 +17,9 @@ void lcd_send_cmd(uint8_t cmd) {
     data_t[1] = (cmd & 0xF0) | 0x08; // en=0, rs=0
     data_t[2] = ((cmd << 4) & 0xF0) | 0x0C; // en=1, rs=0
     data_t[3] = ((cmd << 4) & 0xF0) | 0x08; // en=0, rs=0
-    err = i2c_master_write_to_device(I2C_NUM, SLAVE_ADDRESS_LCD, data_t, 4, 1000);
-    if (err != 0) ESP_LOGI(TAG, "Error in sending command");
+
+    err_lcd = i2c_master_write_to_device(I2C_NUM, SLAVE_ADDRESS_LCD, data_t, 4, 1000);
+    if (err_lcd != 0) ESP_LOGI(TAG, "Error in sending command");
 }
 
 void lcd_send_data(uint8_t data) {
@@ -27,8 +28,9 @@ void lcd_send_data(uint8_t data) {
     data_t[1] = (data & 0xF0) | 0x09; // en=0, rs=1
     data_t[2] = ((data << 4) & 0xF0) | 0x0D; // en=1, rs=1
     data_t[3] = ((data << 4) & 0xF0) | 0x09; // en=0, rs=1
-    err = i2c_master_write_to_device(I2C_NUM, SLAVE_ADDRESS_LCD, data_t, 4, 1000);
-    if (err != 0) ESP_LOGI(TAG, "Error in sending data");
+
+    err_lcd = i2c_master_write_to_device(I2C_NUM, SLAVE_ADDRESS_LCD, data_t, 4, 1000);
+    if (err_lcd != 0) ESP_LOGI(TAG, "Error in sending data");
 }
 
 void lcd_clear(void) {
@@ -66,18 +68,20 @@ void lcd_init(void) {
 
 void lcd_send_string(char *str) {
     while (*str) lcd_send_data(*str++);
+    free(str);
 }
 
-void lcd_send_custom(const char* str, uint8_t pos_x, uint8_t pos_y) {
+void lcd_send_custom(char* str, uint8_t pos_x, uint8_t pos_y) {
     lcd_send_cmd(0x40); // Set CGRAM address
     for (int i = 0; i < 8; ++i) {
         lcd_send_data(str[i]);
     }
     lcd_put_cur(pos_x, pos_y);
     lcd_send_data(0);
+    free(str);
 }
 
-void update_value(char *string, volatile float value, uint8_t pos_x, uint8_t pos_y) {
+void update_value(char *string, float value, uint8_t pos_x, uint8_t pos_y) {
     sprintf(string, "%5.1f", value);
     lcd_put_cur(pos_x, pos_y);
     lcd_send_string(string);

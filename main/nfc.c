@@ -13,19 +13,17 @@
 
 static const char *TAG = "NFC";
 
-esp_err_t err;
+esp_err_t err_nfc;
 
 void nfc_init(void) {
     uint8_t data[4] = {0x00, 0x00, 0x00, 0x00};
-    err = i2c_master_write_to_device(I2C_NUM, SLAVE_ADDRESS_NFC, data, 4, 1000);
-    if (err != 0) ESP_LOGI(TAG, "Error in initializing NFC");
+    err_nfc = i2c_master_write_to_device(I2C_NUM, SLAVE_ADDRESS_NFC, data, 4, 1000);
+    if (err_nfc != 0) ESP_LOGI(TAG, "Error in initializing NFC");
 }
 
 uint8_t *nfc_read() {
     uint8_t *data = malloc(4*sizeof(uint8_t));
-    err = i2c_master_read_from_device(I2C_NUM, SLAVE_ADDRESS_NFC, data, 4, 1000);
-    if (err != 0) ESP_LOGI(TAG, "Error in reading data");
+    err_nfc = i2c_master_read_from_device(I2C_NUM, SLAVE_ADDRESS_NFC, data, 4, 1000);
+    if (err_nfc != 0) ESP_LOGI(TAG, "Error in reading data");
     return data;
 }
-
-esp_err_t err;
