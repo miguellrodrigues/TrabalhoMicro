@@ -12,43 +12,52 @@
 #include <cJSON.h>
 #include <string.h>
 
-#include "i2c-lcd.h"
+#include "include/i2c-lcd.h"
+#include "include/nfc.h"
 
 
 #define TAG "NFC_Tag_System"
 
 typedef enum {
-    STATE_IDLE,
-    STATE_WAITING_FOR_USER_INPUT,
-    STATE_WAITING_FOR_NFC,
-    STATE_CREATING_USER,
-    STATE_DELETING_USER
+    STATE_IDLE, STATE_WAITING_FOR_USER_INPUT, STATE_WAITING_FOR_NFC, STATE_CREATING_USER, STATE_DELETING_USER
 } state_t;
 
 // states prototypes
 void state_idle();
+
 void state_waiting_for_user_input();
+
 void state_waiting_for_nfc();
+
 void state_creating_user();
+
 void state_deleting_user();
 
 // config prototypes
 void i2c_config();
+
 esp_vfs_spiffs_conf_t file_config();
 
 // files prototypes
 uint8_t file_exists(const char *path);
+
 FILE *open_file(const char *path, const char *mode);
+
 void close_file(FILE *file);
+
 cJSON *load_json(const char *path);
+
 void save_json(const char *path, cJSON *json);
 
 // users file functions
 void create_users_file(esp_vfs_spiffs_conf_t conf);
 
 void list_users();
+
 cJSON *get_user(const char *nfc_id);
+
 void add_user(const char *name, const char *nfc_id);
+
 void remove_user(const char *nfc_id);
 
 // Global variables
@@ -59,6 +68,7 @@ _Noreturn void app_main() {
     // Configuration
     i2c_config();
     lcd_init();
+    nfc_init();
 
     esp_vfs_spiffs_conf_t conf = file_config();
     create_users_file(conf);
@@ -91,25 +101,13 @@ _Noreturn void app_main() {
 // config functions
 
 void i2c_config() {
-    i2c_config_t i2c_config = {
-            .mode             = I2C_MODE_MASTER,
-            .sda_io_num       = GPIO_NUM_21,
-            .sda_pullup_en    = GPIO_PULLUP_ENABLE,
-            .scl_io_num       = GPIO_NUM_22,
-            .scl_pullup_en    = GPIO_PULLUP_ENABLE,
-            .master.clk_speed = 100000
-    };
+    i2c_config_t i2c_config = {.mode             = I2C_MODE_MASTER, .sda_io_num       = GPIO_NUM_21, .sda_pullup_en    = GPIO_PULLUP_ENABLE, .scl_io_num       = GPIO_NUM_22, .scl_pullup_en    = GPIO_PULLUP_ENABLE, .master.clk_speed = 100000};
     i2c_param_config(I2C_NUM_0, &i2c_config);
     i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
 }
 
 esp_vfs_spiffs_conf_t file_config() {
-    esp_vfs_spiffs_conf_t conf = {
-            .base_path = "/spiffs",
-            .partition_label = NULL,
-            .max_files = 5,
-            .format_if_mount_failed = true
-    };
+    esp_vfs_spiffs_conf_t conf = {.base_path = "/spiffs", .partition_label = NULL, .max_files = 5, .format_if_mount_failed = true};
 
     return conf;
 }
@@ -122,6 +120,7 @@ void state_idle() {
 
     vTaskDelay(pdMS_TO_TICKS(100));
 }
+
 void state_waiting_for_user_input() {
     lcd_clear();
     lcd_send_string("Waiting for user input...");
@@ -130,6 +129,7 @@ void state_waiting_for_user_input() {
     vTaskDelay(pdMS_TO_TICKS(1000));
     current_state = STATE_CREATING_USER;
 }
+
 void state_waiting_for_nfc() {
     lcd_clear();
     lcd_send_string("Waiting for NFC tag...");
@@ -138,6 +138,7 @@ void state_waiting_for_nfc() {
     vTaskDelay(pdMS_TO_TICKS(1000));
     current_state = STATE_IDLE;
 }
+
 void state_creating_user() {
     lcd_clear();
     lcd_send_string("Waiting for user id...");
@@ -146,6 +147,7 @@ void state_creating_user() {
     vTaskDelay(pdMS_TO_TICKS(1000));
     current_state = STATE_IDLE;
 }
+
 void state_deleting_user() {
     lcd_clear();
     lcd_send_string("Waiting for user id...");
@@ -164,9 +166,11 @@ uint8_t file_exists(const char *path) {
     }
     return 0;
 }
+
 FILE *open_file(const char *path, const char *mode) {
     return fopen(path, mode);
 }
+
 void close_file(FILE *file) {
     fclose(file);
 }
@@ -190,6 +194,7 @@ cJSON *load_json(const char *path) {
     close_file(file);
     return json;
 }
+
 void save_json(const char *path, cJSON *json) {
     FILE *file = open_file(path, "w");
     if (!file) {
@@ -225,6 +230,7 @@ void list_users() {
         ESP_LOGI(TAG, "Name: %s, NFC ID: %s", name, nfc_id);
     }
 }
+
 cJSON *get_user(const char *nfc_id) {
     if (!users) {
         ESP_LOGE(TAG, "Failed to load users file");
@@ -243,6 +249,7 @@ cJSON *get_user(const char *nfc_id) {
     ESP_LOGI(TAG, "User not found");
     return NULL;
 }
+
 void add_user(const char *name, const char *nfc_id) {
     if (!users) {
         ESP_LOGE(TAG, "Failed to load users file");
@@ -254,6 +261,7 @@ void add_user(const char *name, const char *nfc_id) {
     cJSON_AddStringToObject(user, "nfc_id", nfc_id);
     cJSON_AddItemToArray(users, user);
 }
+
 void remove_user(const char *nfc_id) {
     if (!users) {
         ESP_LOGE(TAG, "Failed to load users file");

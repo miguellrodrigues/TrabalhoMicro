@@ -1,7 +1,7 @@
-#include "i2c-lcd.h"
-#include "esp_log.h"
-#include "driver/i2c.h"
-#include "freertos/task.h"
+#include "include/i2c-lcd.h"
+#include <esp_log.h>
+#include <driver/i2c.h>
+#include <freertos/task.h>
 #include <stdint.h>
 
 #define SLAVE_ADDRESS_LCD 0x27

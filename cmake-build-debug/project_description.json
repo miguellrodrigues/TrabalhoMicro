@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "TrabalhoMicro",
-    "project_version":    "1",
+    "project_version":    "8522d34-dirty",
     "project_path":       "/home/miguel/CLionProjects/TrabalhoMicro",
     "idf_path":           "/home/miguel/esp/esp-idf",
     "build_dir":          "/home/miguel/CLionProjects/TrabalhoMicro/cmake-build-debug",
@@ -805,7 +805,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "/home/miguel/CLionProjects/TrabalhoMicro/cmake-build-debug/esp-idf/main/libmain.a",
-            "sources": [ "/home/miguel/CLionProjects/TrabalhoMicro/main/TrabalhoMicro.c", "/home/miguel/CLionProjects/TrabalhoMicro/main/i2c-lcd.c" ],
+            "sources": [ "/home/miguel/CLionProjects/TrabalhoMicro/main/TrabalhoMicro.c", "/home/miguel/CLionProjects/TrabalhoMicro/main/i2c-lcd.c", "/home/miguel/CLionProjects/TrabalhoMicro/main/nfc.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {
