@@ -8,7 +8,7 @@
 #include <freertos/task.h>
 #include <stdint.h>
 
-#define SLAVE_ADDRESS_NFC 0x20
+#define SLAVE_ADDRESS_NFC 0x21
 #define I2C_NUM I2C_NUM_0
 
 static const char *TAG = "NFC";

@@ -8,7 +8,7 @@ Requirement files:
 Python being checked: /home/miguel/.espressif/python_env/idf5.2_py3.10_env/bin/python
 -- Project sdkconfig file /home/miguel/CLionProjects/TrabalhoMicro/sdkconfig
 -- Compiler supported targets: xtensa-esp-elf
--- App "TrabalhoMicro" version: 877e78f-dirty
+-- App "TrabalhoMicro" version: 5e4b603-dirty
 -- Adding linker script /home/miguel/CLionProjects/TrabalhoMicro/cmake-build-debug/esp-idf/esp_system/ld/memory.ld
 -- Adding linker script /home/miguel/esp/esp-idf/components/esp_system/ld/esp32/sections.ld.in
 -- Adding linker script /home/miguel/esp/esp-idf/components/esp_rom/esp32/ld/esp32.rom.ld

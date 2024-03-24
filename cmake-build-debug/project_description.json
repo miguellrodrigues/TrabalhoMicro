@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "TrabalhoMicro",
-    "project_version":    "877e78f-dirty",
+    "project_version":    "5e4b603-dirty",
     "project_path":       "/home/miguel/CLionProjects/TrabalhoMicro",
     "idf_path":           "/home/miguel/esp/esp-idf",
     "build_dir":          "/home/miguel/CLionProjects/TrabalhoMicro/cmake-build-debug",
